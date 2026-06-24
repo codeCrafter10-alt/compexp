@@ -29,6 +29,12 @@ import data.analysis
 
 GLOBALS = {}
 
+def init_worker(acts, states, feats, dataset):
+    GLOBALS["acts"] = acts
+    GLOBALS["states"] = states
+    GLOBALS["feats"] = feats
+    GLOBALS["dataset"] = dataset
+
 
 def save_with_acts(preds, acts, fname):
     preds_to_save = preds.copy()
@@ -506,15 +512,18 @@ def search_feats(acts, states, feats, weights, dataset):
         units = settings.NEURONS
     mp_args = [(u,) for u in units]
 
-    if settings.PARALLEL < 1:
-        pool_cls = util.FakePool
-    else:
-        pool_cls = mp.Pool
-
     n_done = 0
-    with pool_cls(settings.PARALLEL) as pool, tqdm(
-        total=len(units), desc="Units"
-    ) as pbar:
+
+    if settings.PARALLEL < 1:
+        pool = util.FakePool(settings.PARALLEL)
+    else:
+        pool = mp.Pool(
+            processes=settings.PARALLEL,
+            initializer=init_worker,
+            initargs=(acts, states, feats[0], feats[1]),
+        )
+
+    with pool, tqdm(total=len(units), desc="Units") as pbar:
         for res in pool.imap_unordered(ioufunc, mp_args):
             unit = res["unit"]
             best_lab, best_iou = res["best"]
