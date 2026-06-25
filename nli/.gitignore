@@ -131,9 +131,6 @@ dmypy.json
 models/*
 !models/README.md
 
-exp/*
-!exp/README.md
-
 data/*
 !data/analysis
 !data/counterfactual_snli/
