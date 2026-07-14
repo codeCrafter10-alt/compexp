@@ -14,13 +14,13 @@ dependencies:
   - Pillow
   - seaborn
   - scikit-image
-  - pyparsing
+  - pyparsing==2.2.1
   - nltk
   - spacy
   - pip
   - scikit-learn
-  - cython
+  - cython==3.0
   - pip:
     - pyeda
+    - benepar
   - spacy==2.2.4
-  - benepar
