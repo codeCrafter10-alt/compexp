@@ -16,7 +16,6 @@ dependencies:
   - scikit-image
   - pyparsing==2.2.1
   - nltk
-  - spacy
   - pip
   - scikit-learn
   - cython==3.0
